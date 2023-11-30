@@ -154,13 +154,14 @@ app.post("/auth/login", async (req, res) => {
 //Crendencials
 const dbUser = process.env.DB_USER;
 const dbPassword = process.env.DB_PASS;
+const PORT = process.env.PORT || 3000;
 
 mongoose
   .connect(
     `mongodb+srv://${dbUser}:${dbPassword}@cluster0.v5jlu6p.mongodb.net/?retryWrites=true&w=majority`
   )
   .then(() => {
-    app.listen(3000);
-    console.log("Conectado ao DB");
+    app.listen(PORT, () => {
+      console.log(`Servidor rodando na porta ${PORT}`)});
   })
   .catch((err) => console.log(err));
