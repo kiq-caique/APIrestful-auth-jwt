@@ -1,8 +1,10 @@
 require("dotenv").config();
 const express = require("express");
-const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+
+const connectDB = require("./connectMongo");
+connectDB();
 
 const app = express();
 
@@ -11,11 +13,6 @@ app.use(express.json());
 
 // Models
 const User = require("./models/User");
-
-//Open Route - Public Route
-app.get("/", (req, res) => {
-  res.status(200).json({ msg: "Bem vindo a API!" });
-});
 
 // Private Route
 app.get("/user/:id", checkToken, async (req,res) => {
@@ -150,18 +147,3 @@ app.post("/auth/login", async (req, res) => {
  }
 
 });
-
-//Crendencials
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASS;
-const PORT = process.env.PORT || 3000;
-
-mongoose
-  .connect(
-    `mongodb+srv://${dbUser}:${dbPassword}@cluster0.v5jlu6p.mongodb.net/?retryWrites=true&w=majority`
-  )
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Servidor rodando na porta ${PORT}`)});
-  })
-  .catch((err) => console.log(err));
